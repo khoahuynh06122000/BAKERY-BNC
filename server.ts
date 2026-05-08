@@ -20,6 +20,24 @@ async function startServer() {
     next();
   });
 
+  // API routes
+  app.post("/api/ai/insights", async (req, res) => {
+    try {
+      if (!process.env.GEMINI_API_KEY) {
+        throw new Error("GEMINI_API_KEY is not configured on the server.");
+      }
+      const { data, type } = req.body;
+      
+      // We import it here to avoid top-level issues with env vars
+      const { getProductionInsights } = await import("./src/services/aiService.ts");
+      const result = await getProductionInsights(data, type);
+      res.json({ result });
+    } catch (error: any) {
+      console.error("API Error:", error.message);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Health check for platform
   app.get("/api/health", (req, res) => {
     res.json({ status: "healthy", timestamp: new Date().toISOString() });
