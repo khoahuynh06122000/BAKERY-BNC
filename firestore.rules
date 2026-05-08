@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'khoa.huynh.06.12.2000@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+    
+    function isOwner(data) {
+      return isSignedIn() && (isAdmin() || (data.xuong != null));
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Common rule for workshop-based data
+    match /nvl/{id} {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin() || (isSignedIn() && request.resource.data.xuong != null && (resource == null || resource.data.xuong == request.resource.data.xuong));
+      allow delete: if isAdmin();
+    }
+    
+    match /recipes/{id} {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin() || (isSignedIn() && request.resource.data.xuong != null && (resource == null || resource.data.xuong == request.resource.data.xuong));
+      allow delete: if isAdmin();
+    }
+    
+    match /productionLogs/{id} {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin() || (isSignedIn() && request.resource.data.xuong != null && (resource == null || resource.data.xuong == request.resource.data.xuong));
+      allow delete: if isAdmin();
+    }
+    
+    match /overheads/{id} {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin() || (isSignedIn() && request.resource.data.xuong != null && (resource == null || resource.data.xuong == request.resource.data.xuong));
+      allow delete: if isAdmin();
+    }
+    
+    match /materialUsage/{id} {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin() || (isSignedIn() && request.resource.data.xuong != null && (resource == null || resource.data.xuong == request.resource.data.xuong));
+      allow delete: if isAdmin();
+    }
+    
+    match /materialConversions/{id} {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin() || (isSignedIn() && request.resource.data.xuong != null && (resource == null || resource.data.xuong == request.resource.data.xuong));
+      allow delete: if isAdmin();
+    }
+    
+    match /loginLogs/{id} {
+      allow create: if isSignedIn();
+      allow read: if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    match /admins/{uid} {
+      allow read: if isSignedIn();
+      allow write: if request.auth.token.email == 'khoa.huynh.06.12.2000@gmail.com';
+    }
+    
+    match /test/connection {
+      allow read: if isSignedIn();
+    }
+  }
+}

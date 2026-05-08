@@ -1,11 +1,39 @@
-<div align="center">
+# Bakery Management System (Aurelius OS)
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Ứng dụng quản lý sản xuất và phân tích chiến lược AI dành cho tiệm bánh chuyên nghiệp.
 
-  <h1>Built with AI Studio</h2>
+## 🚀 Hướng dẫn chạy ứng dụng
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+### 1. Chạy trên máy cá nhân (Local)
+Sau khi tải mã nguồn về hoặc clone từ GitHub:
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+1. Mở terminal tại thư mục dự án.
+2. Cài đặt thư viện:
+   ```bash
+   npm install
+   ```
+3. Cài đặt biến môi trường:
+   Tạo file `.env` tại thư mục gốc và thêm mã API Gemini của bạn:
+   ```env
+   GEMINI_API_KEY=your_api_key_here
+   ```
+4. Chạy ứng dụng:
+   ```bash
+   npm run dev
+   ```
+5. Mở trình duyệt tại: `http://localhost:3000`
 
-</div>
+### 2. Triển khai (Deployment)
+**LƯU Ý QUAN TRỌNG:** Ứng dụng này có phần Backend (Node.js) để xử lý AI.
+- **GitHub Pages:** KHÔNG hỗ trợ Backend, nên AI sẽ không hoạt động nếu bạn chỉ dùng GitHub Pages.
+- **Khuyến nghị:** Sử dụng **Google Cloud Run**, **Vercel** (với Serverless Functions), hoặc **Render** để triển khai bản build.
+
+## 🛠 Công nghệ sử dụng
+- **Frontend:** React, Tailwind CSS, Vite.
+- **Backend:** Node.js (Express).
+- **AI:** Google Gemini AI (Cố vấn chiến lược Aurelius).
+- **Visualization:** Recharts (Biểu đồ sản xuất).
+
+## 📝 Lưu ý về lỗi 403 / Màn hình trắng
+- Nếu bạn thấy màn hình trắng trên GitHub, hãy mở Console (F12) để kiểm tra. Đảm bảo đường dẫn `base` trong `vite.config.ts` khớp với cấp độ thư mục của bạn.
+- Lỗi 403 khi chia sẻ link Preview là do cơ chế bảo mật của AI Studio. Hãy sử dụng tính năng **Deployment** chính thức để có link công khai.

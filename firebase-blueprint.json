@@ -1,0 +1,132 @@
+{
+  "entities": {
+    "NVL": {
+      "title": "Raw Material",
+      "description": "Definition of raw materials used in the bakery",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ten": { "type": "string" },
+        "donVi": { "type": "string" },
+        "gia": { "type": "number" },
+        "xuong": { "type": "string" },
+        "loai": { "type": "string", "enum": ["chính", "phụ"] }
+      },
+      "required": ["id", "ten", "donVi", "gia", "xuong"]
+    },
+    "Recipe": {
+      "title": "Recipe",
+      "description": "Production recipe for a specific cake",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "tenBanh": { "type": "string" },
+        "soLuongChuan": { "type": "number" },
+        "costDinhMucMe": { "type": "number" },
+        "nvl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "nvlId": { "type": "string" },
+              "soLuong": { "type": "number" }
+            }
+          }
+        },
+        "xuong": { "type": "string" }
+      },
+      "required": ["id", "tenBanh", "soLuongChuan", "xuong"]
+    },
+    "ProductionLog": {
+      "title": "Production Log",
+      "description": "Log of a production run",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ngay": { "type": "string", "format": "date" },
+        "xuong": { "type": "string" },
+        "recipeId": { "type": "string" },
+        "soLuongSanXuat": { "type": "number" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "nvlId": { "type": "string" },
+              "dinhMuc": { "type": "number" },
+              "thucTe": { "type": "number" },
+              "chenh": { "type": "number" },
+              "chenhPct": { "type": "number" }
+            }
+          }
+        },
+        "giaThanh": { "type": "number" },
+        "thoiGian": { "type": "string" }
+      },
+      "required": ["id", "ngay", "xuong", "recipeId", "soLuongSanXuat"]
+    },
+    "Overhead": {
+      "title": "Overhead Cost",
+      "description": "Daily overhead costs for a workshop",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ngay": { "type": "string", "format": "date" },
+        "xuong": { "type": "string" },
+        "chiPhiPhu": { "type": "number" }
+      },
+      "required": ["id", "ngay", "xuong", "chiPhiPhu"]
+    },
+    "LoginLog": {
+      "title": "Login Log",
+      "description": "Record of user login activity",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "email", "timestamp"]
+    },
+    "MaterialConversion": {
+      "title": "Material Conversion",
+      "description": "Mapping between recipe materials and inventory materials",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "sourceTen": { "type": "string" },
+        "targetNvlId": { "type": "string" },
+        "ratio": { "type": "number" },
+        "xuong": { "type": "string" }
+      },
+      "required": ["id", "sourceTen", "targetNvlId", "ratio", "xuong"]
+    }
+  },
+  "firestore": {
+    "/nvl/{nvlId}": {
+      "schema": "NVL",
+      "description": "Collection of raw materials"
+    },
+    "/recipes/{recipeId}": {
+      "schema": "Recipe",
+      "description": "Collection of production recipes"
+    },
+    "/productionLogs/{logId}": {
+      "schema": "ProductionLog",
+      "description": "Collection of daily production logs"
+    },
+    "/overheads/{overheadId}": {
+      "schema": "Overhead",
+      "description": "Collection of overhead costs"
+    },
+    "/loginLogs/{logId}": {
+      "schema": "LoginLog",
+      "description": "Collection of login history"
+    },
+    "/materialConversions/{convId}": {
+      "schema": "MaterialConversion",
+      "description": "Collection of material conversions"
+    }
+  }
+}
